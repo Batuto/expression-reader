@@ -1,6 +1,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <ctype.h>
 #include <iostream>
 
 
@@ -13,9 +14,8 @@ struct estructura_identificador{
 }identificadores[100];
 int main(void),
     numero_identificadores = 0,
-    x = 0, j, i,
-    long_cad,
-    long_oper;
+    x = 0,
+    long_cad, long_oper;
 
 int main(void){
     system("clear");
@@ -28,23 +28,18 @@ int main(void){
     identificadores[numero_identificadores].identificador = part;
     while(part != NULL){
         numero_identificadores++;
-        printf("%s\n",part);
         part = strtok(NULL, operadores);
         identificadores[numero_identificadores].identificador = part;
         }
-
-    for(i = 0; i < long_cad; i++){
+    for(int i = 0; i < long_cad; i++){
         // Ciclo para iterar sobre la cadena
-        for(j = 0; j < long_oper; j++)
+        for(int j = 0; j < long_oper; j++)
             // Ciclo para iterar sobre los operadores
             if(cadena2[i] == operadores[j]){
                 operadores_encontrados[x] = cadena2[i];
-                printf("%c","x");
                 x++;
             }
         }
-
-    printf("\nCantidad de identificadores:\n%d\n", numero_identificadores);
     printf("\nEncontrado:\n%s\n",operadores_encontrados);
     printf("\n\nIdentificadores encontrados:\n");
     for(int i = 0; i < numero_identificadores; i++){
@@ -53,26 +48,29 @@ int main(void){
         }
     }
     printf("\n\nConstantes encontradas:\n");
-    for(int i = 0; i < numero_identificadores; i++){
+    for(int i = 1; i < numero_identificadores; i++){
         if(isdigit(identificadores[i].identificador[0])){
             printf("\n%s",identificadores[i].identificador);
             identificadores[i].valor = atoi(identificadores[i].identificador);
         }
         else{
             printf("Introduce el valor de '%s':\n>>", identificadores[i].identificador);
-            int var;
-            scanf("%d", &var);
-            identificadores[i].valor = var;
+            scanf("%d", &identificadores[i].valor);
         }
-
-
     }
-    printf("\n\n");
-    int valor;
-    printf("%d <\n\n", identificadores[0].valor);
-    printf("%s <<\n", identificadores[1].identificador);
-    printf("%d <<\n\n", (int)*(identificadores[1].identificador));
-    valor = identificadores[0].valor + identificadores[1].valor;
-    printf("%d", valor);
+    long_oper = strlen(operadores_encontrados); // Se reutiliza la variable.
+    for(int i = 0; i < long_oper; i++){
+        if(operadores_encontrados[i] == 61)
+            identificadores[0].valor = identificadores[i+1].valor;
+        if(operadores_encontrados[i] == 43)
+            identificadores[0].valor += identificadores[i+1].valor;
+        if(operadores_encontrados[i] == 45)
+            identificadores[0].valor -= identificadores[i+1].valor;
+        if(operadores_encontrados[i] == 42)
+            identificadores[0].valor  *= identificadores[i+1].valor;
+        if(operadores_encontrados[i] == 47)
+            identificadores[0].valor /= identificadores[i+1].valor;
+    }
+    printf("\n\n\nResultado:\n\t%s = %d\n", identificadores[0].identificador, identificadores[0].valor);
     return 0;
 }
