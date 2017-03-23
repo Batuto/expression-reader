@@ -56,10 +56,23 @@ int main(void){
     for(int i = 0; i < numero_identificadores; i++){
         if(isdigit(identificadores[i].identificador[0])){
             printf("\n%s",identificadores[i].identificador);
+            identificadores[i].valor = atoi(identificadores[i].identificador);
+        }
+        else{
+            printf("Introduce el valor de '%s':\n>>", identificadores[i].identificador);
+            int var;
+            scanf("%d", &var);
+            identificadores[i].valor = var;
         }
 
 
     }
     printf("\n\n");
+    int valor;
+    printf("%d <\n\n", identificadores[0].valor);
+    printf("%s <<\n", identificadores[1].identificador);
+    printf("%d <<\n\n", (int)*(identificadores[1].identificador));
+    valor = identificadores[0].valor + identificadores[1].valor;
+    printf("%d", valor);
     return 0;
 }
