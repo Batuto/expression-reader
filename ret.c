@@ -16,12 +16,24 @@ int main(void),
     numero_identificadores = 0,
     x = 0,
     long_cad, long_oper;
+FILE * archivo, * salida;
+int bienvenida(void);
 
 int main(void){
     system("clear");
     long_oper = strlen(operadores);
-    printf("Introduce una expresión:\n");
-    scanf("%[^\n]", &cadena);
+    salida = fopen("output.txt", "w");
+    bienvenida();
+    archivo = fopen("exp", "r");
+    if((archivo) == NULL){
+        fprintf(salida,"[X] Error... No se ha podido abrir el archivo.");
+        exit(1);
+    }
+    //while(feof(archivo) == 0){
+        fgets(cadena, 100, archivo);
+        //if(feof(archivo) == 0)
+
+    //}
     strcpy(cadena2, cadena);
     long_cad = strlen(cadena);
     part = strtok(cadena, operadores);
@@ -40,17 +52,18 @@ int main(void){
                 x++;
             }
         }
-    printf("\nEncontrado:\n%s\n",operadores_encontrados);
-    printf("\n\nIdentificadores encontrados:\n");
+    fprintf(salida, "\nExpresión:\n%s", cadena2);
+    fprintf(salida, "\nEncontrado:\n%s\n",operadores_encontrados);
+    fprintf(salida, "\n\nIdentificadores encontrados:\n");
     for(int i = 0; i < numero_identificadores; i++){
         if(not isdigit(identificadores[i].identificador[0])){
-            printf("\n%s",identificadores[i].identificador);
+            fprintf(salida, "\n%s",identificadores[i].identificador);
         }
     }
-    printf("\n\nConstantes encontradas:\n");
+    fprintf(salida, "\n\nConstantes encontradas:\n\n");
     for(int i = 1; i < numero_identificadores; i++){
         if(isdigit(identificadores[i].identificador[0])){
-            printf("\n%s",identificadores[i].identificador);
+            fprintf(salida, "%s\n",identificadores[i].identificador);
             identificadores[i].valor = atoi(identificadores[i].identificador);
         }
         else{
@@ -71,6 +84,14 @@ int main(void){
         if(operadores_encontrados[i] == 47)
             identificadores[0].valor /= identificadores[i+1].valor;
     }
-    printf("\n\n\nResultado:\n\t%s = %d\n", identificadores[0].identificador, identificadores[0].valor);
+    fprintf(salida, "\n\n\nResultado:\n\t%s = %d\n", identificadores[0].identificador, identificadores[0].valor);
+    fclose(salida);
+    fclose(archivo);
+    return 0;
+}
+
+int bienvenida(void){
+    fprintf(salida,"\t\tIngeniería en Sistemas Computacionales\n\n\n");
+    fprintf(salida,"\t\tMateria: Compiladores y traductores\n");
     return 0;
 }
