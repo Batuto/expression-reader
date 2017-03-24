@@ -85,6 +85,13 @@ int main(void){
             identificadores[0].valor /= identificadores[i+1].valor;
     }
     fprintf(salida, "\n\n\nResultado:\n\t%s = %d\n", identificadores[0].identificador, identificadores[0].valor);
+    char fecha[30];
+    FILE * process;
+    process = popen("date","r");
+    fgets(fecha,30,process);
+    fflush(process);
+    pclose(process);
+    fprintf(salida, "\n\n\t\t\t%s", fecha);
     fclose(salida);
     fclose(archivo);
     return 0;
